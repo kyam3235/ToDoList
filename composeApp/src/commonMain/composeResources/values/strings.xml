@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">ToDo List</string>
+    <string name="archive">アーカイブ</string>
+    <string name="add_task">タスクを追加</string>
+    <string name="add_new_task">新しいタスクを追加</string>
+    <string name="task_title">タスクのタイトル</string>
+    <string name="add">追加</string>
+    <string name="cancel">キャンセル</string>
+</resources>
