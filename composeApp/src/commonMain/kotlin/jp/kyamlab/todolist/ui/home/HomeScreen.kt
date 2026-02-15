@@ -42,6 +42,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import jp.kyamlab.todolist.model.ToDoItem
+import org.jetbrains.compose.resources.stringResource
+import todolist.composeapp.generated.resources.Res
+import todolist.composeapp.generated.resources.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -56,12 +59,12 @@ fun HomeScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("ToDo List") },
+                title = { Text(stringResource(Res.string.app_name)) },
                 actions = {
                     IconButton(onClick = onNavigateToArchive) {
                         Icon(
                             imageVector = Icons.Default.Archive,
-                            contentDescription = "Archive"
+                            contentDescription = stringResource(Res.string.archive)
                         )
                     }
                 },
@@ -74,7 +77,7 @@ fun HomeScreen(
         },
         floatingActionButton = {
             FloatingActionButton(onClick = { showAddDialog = true }) {
-                Icon(Icons.Default.Add, contentDescription = "Add Task")
+                Icon(Icons.Default.Add, contentDescription = stringResource(Res.string.add_task))
             }
         }
     ) { innerPadding ->
@@ -147,7 +150,7 @@ fun HomeContent(
                     ) {
                         Icon(
                             imageVector = Icons.Default.Archive,
-                            contentDescription = "Archive",
+                            contentDescription = stringResource(Res.string.archive),
                             tint = MaterialTheme.colorScheme.onSurface
                         )
                     }
@@ -199,12 +202,12 @@ fun AddItemDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Add New Task") },
+        title = { Text(stringResource(Res.string.add_new_task)) },
         text = {
             TextField(
                 value = text,
                 onValueChange = { text = it },
-                label = { Text("Task Title") },
+                label = { Text(stringResource(Res.string.task_title)) },
                 singleLine = true
             )
         },
@@ -216,12 +219,12 @@ fun AddItemDialog(
                     }
                 }
             ) {
-                Text("Add")
+                Text(stringResource(Res.string.add))
             }
         },
         dismissButton = {
             Button(onClick = onDismiss) {
-                Text("Cancel")
+                Text(stringResource(Res.string.cancel))
             }
         }
     )
