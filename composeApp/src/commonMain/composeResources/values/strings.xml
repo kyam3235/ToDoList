@@ -5,6 +5,8 @@
     <string name="add_new_task">新しいタスクを追加</string>
     <string name="task_title">タスクのタイトル</string>
     <string name="task_description">タスクの説明</string>
+    <string name="edit_task">タスクを編集</string>
+    <string name="save">保存</string>
     <string name="add">追加</string>
     <string name="cancel">キャンセル</string>
 </resources>

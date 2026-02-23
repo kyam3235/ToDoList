@@ -22,6 +22,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxValue
@@ -55,6 +56,10 @@ fun HomeScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     var showAddDialog by remember { mutableStateOf(false) }
+    var showEditSheet by remember { mutableStateOf(false) }
+    var editingItem by remember {
+        mutableStateOf(ToDoItem(id = "", title = "", createdAt = 0L))
+    }
 
     Scaffold(
         topBar = {
@@ -84,8 +89,11 @@ fun HomeScreen(
         HomeContent(
             items = uiState.items,
             paddingValues = innerPadding,
-            onItemClick = { item -> onNavigateToDetail(item.id) },
-            onArchiveItem = { item -> viewModel.archiveItem(item) }
+            onItemClick = { item ->
+                editingItem = item
+                showEditSheet = true
+            },
+            onArchiveItem = { item -> viewModel.archiveItem(item.id) }
         )
 
         if (showAddDialog) {
@@ -96,6 +104,68 @@ fun HomeScreen(
                     showAddDialog = false
                 }
             )
+        }
+
+        if (showEditSheet) {
+            EditItemBottomSheet(
+                item = editingItem,
+                onDismiss = { showEditSheet = false },
+                onSave = { updatedItem ->
+                    viewModel.updateItem(updatedItem)
+                    showEditSheet = false
+                }
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun EditItemBottomSheet(
+    item: ToDoItem,
+    onDismiss: () -> Unit,
+    onSave: (ToDoItem) -> Unit
+) {
+    var title by remember { mutableStateOf(item.title) }
+    var description by remember { mutableStateOf(item.description) }
+
+    ModalBottomSheet(
+        onDismissRequest = onDismiss
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+                .padding(bottom = 32.dp) // Extra padding for bottom
+        ) {
+            Text(
+                text = stringResource(Res.string.edit_task),
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
+            TextField(
+                value = title,
+                onValueChange = { title = it },
+                label = { Text(stringResource(Res.string.task_title)) },
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+            )
+            TextField(
+                value = description,
+                onValueChange = { description = it },
+                label = { Text(stringResource(Res.string.task_description)) },
+                modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp)
+            )
+            Button(
+                onClick = {
+                    if (title.isNotBlank()) {
+                        onSave(item.copy(title = title, description = description))
+                    }
+                },
+                modifier = Modifier.align(Alignment.End)
+            ) {
+                Text(stringResource(Res.string.save))
+            }
         }
     }
 }
