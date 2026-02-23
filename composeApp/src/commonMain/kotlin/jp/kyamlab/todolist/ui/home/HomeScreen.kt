@@ -91,8 +91,8 @@ fun HomeScreen(
         if (showAddDialog) {
             AddItemDialog(
                 onDismiss = { showAddDialog = false },
-                onAdd = { title ->
-                    viewModel.addItem(title)
+                onAdd = { title, description ->
+                    viewModel.addItem(title, description)
                     showAddDialog = false
                 }
             )
@@ -196,26 +196,36 @@ fun ToDoItemCard(
 @Composable
 fun AddItemDialog(
     onDismiss: () -> Unit,
-    onAdd: (String) -> Unit
+    onAdd: (String, String) -> Unit
 ) {
-    var text by remember { mutableStateOf("") }
+    var title by remember { mutableStateOf("") }
+    var description by remember { mutableStateOf("") }
 
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(stringResource(Res.string.add_new_task)) },
         text = {
-            TextField(
-                value = text,
-                onValueChange = { text = it },
-                label = { Text(stringResource(Res.string.task_title)) },
-                singleLine = true
-            )
+            Column {
+                TextField(
+                    value = title,
+                    onValueChange = { title = it },
+                    label = { Text(stringResource(Res.string.task_title)) },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+                )
+                TextField(
+                    value = description,
+                    onValueChange = { description = it },
+                    label = { Text(stringResource(Res.string.task_description)) },
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
         },
         confirmButton = {
             Button(
                 onClick = {
-                    if (text.isNotBlank()) {
-                        onAdd(text)
+                    if (title.isNotBlank()) {
+                        onAdd(title, description)
                     }
                 }
             ) {

@@ -25,10 +25,11 @@ class HomeViewModel : ViewModel() {
         }
     }
 
-    fun addItem(title: String) {
+    fun addItem(title: String, description: String = "") {
         val newItem = ToDoItem(
             id = kotlin.random.Random.nextLong().toString(), // Simple ID generation
             title = title,
+            description = description,
             createdAt = 0L // Placeholder as System.currentTimeMillis() is not available in commonMain without expect/actual or libraries
         )
         _uiState.update { currentState ->
