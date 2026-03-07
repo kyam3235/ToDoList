@@ -1,83 +1,30 @@
 package jp.kyamlab.todolist.ui.home
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import jp.kyamlab.todolist.data.ToDoRepository
 import jp.kyamlab.todolist.model.ToDoItem
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 
 class HomeViewModel : ViewModel() {
 
-    private val _uiState = MutableStateFlow(HomeUiState())
-    val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
-
-    init {
-        // Dummy data for initial display
-        _uiState.update { currentState ->
-            currentState.copy(
-                items = listOf(
-                    ToDoItem(
-                        id = "1",
-                        title = "Task 1",
-                        description = "Description 1",
-                        createdAt = 1000L
-                    ),
-                    ToDoItem(
-                        id = "2",
-                        title = "Task 2",
-                        description = "Description 2",
-                        createdAt = 2000L
-                    ),
-                    ToDoItem(
-                        id = "3",
-                        title = "Task 3",
-                        description = "Description 3",
-                        createdAt = 3000L
-                    )
-                )
-            )
-        }
-    }
+    val uiState: StateFlow<HomeUiState> = ToDoRepository.items
+        .map { items -> HomeUiState(items = items.filter { !it.isArchived }) }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), HomeUiState())
 
     fun addItem(title: String, description: String = "") {
-        val newItem = ToDoItem(
-            id = kotlin.random.Random.nextLong().toString(), // Simple ID generation
-            title = title,
-            description = description,
-            createdAt = 0L // Placeholder as System.currentTimeMillis() is not available in commonMain without expect/actual or libraries
-        )
-        _uiState.update { currentState ->
-            currentState.copy(items = currentState.items + newItem)
-        }
+        ToDoRepository.addItem(title, description)
     }
 
     fun archiveItem(id: String) {
-        _uiState.update { currentState ->
-            val index = currentState.items.indexOfFirst { it.id == id }
-            if (index != -1) {
-                val updatedItems = currentState.items.toMutableList().apply {
-                    this[index] = this[index].copy(isArchived = true)
-                }
-                currentState.copy(items = updatedItems)
-            } else {
-                currentState
-            }
-        }
+        ToDoRepository.archiveItem(id)
     }
 
     fun updateItem(item: ToDoItem) {
-        _uiState.update { currentState ->
-            val index = currentState.items.indexOfFirst { it.id == item.id }
-            if (index != -1) {
-                val updatedItems = currentState.items.toMutableList().apply {
-                    set(index, item)
-                }
-                currentState.copy(items = updatedItems)
-            } else {
-                currentState
-            }
-        }
+        ToDoRepository.updateItem(item)
     }
 }
 

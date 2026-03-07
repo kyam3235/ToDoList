@@ -236,10 +236,11 @@ fun HomeContent(
 @Composable
 fun ToDoItemCard(
     item: ToDoItem,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp)
             .clickable(onClick = onClick),
