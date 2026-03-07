@@ -9,4 +9,6 @@
     <string name="save">保存</string>
     <string name="add">追加</string>
     <string name="cancel">キャンセル</string>
+    <string name="unarchive">アーカイブを解除</string>
+    <string name="no_archived_tasks">アーカイブされたタスクはありません</string>
 </resources>
