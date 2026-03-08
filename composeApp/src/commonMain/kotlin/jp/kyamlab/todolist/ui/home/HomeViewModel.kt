@@ -9,22 +9,22 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
-class HomeViewModel(private val repository: ToDoRepository) : ViewModel() {
+class HomeViewModel(private val toDoRepository: ToDoRepository) : ViewModel() {
 
-    val uiState: StateFlow<HomeUiState> = repository.items
+    val uiState: StateFlow<HomeUiState> = toDoRepository.items
         .map { items -> HomeUiState(items = items.filter { !it.isArchived }) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), HomeUiState())
 
     fun addItem(title: String, description: String = "") {
-        repository.addItem(title, description)
+        toDoRepository.addItem(title, description)
     }
 
     fun archiveItem(id: String) {
-        repository.archiveItem(id)
+        toDoRepository.archiveItem(id)
     }
 
     fun updateItem(item: ToDoItem) {
-        repository.updateItem(item)
+        toDoRepository.updateItem(item)
     }
 }
 
