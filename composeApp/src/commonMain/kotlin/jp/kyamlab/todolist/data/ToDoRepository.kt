@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-object ToDoRepository {
+class ToDoRepository {
     private val _items = MutableStateFlow(
         listOf(
             ToDoItem(id = "1", title = "Task 1", description = "Description 1", createdAt = 1000L),
