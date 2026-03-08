@@ -9,14 +9,14 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
-class ArchiveViewModel : ViewModel() {
+class ArchiveViewModel(private val toDoRepository: ToDoRepository) : ViewModel() {
 
-    val uiState: StateFlow<ArchiveUiState> = ToDoRepository.items
+    val uiState: StateFlow<ArchiveUiState> = toDoRepository.items
         .map { items -> ArchiveUiState(items = items.filter { it.isArchived }) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), ArchiveUiState())
 
     fun unarchiveItem(id: String) {
-        ToDoRepository.unarchiveItem(id)
+        toDoRepository.unarchiveItem(id)
     }
 }
 

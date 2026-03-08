@@ -41,7 +41,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import org.koin.compose.viewmodel.koinViewModel
 import jp.kyamlab.todolist.model.ToDoItem
 import org.jetbrains.compose.resources.stringResource
 import todolist.composeapp.generated.resources.Res
@@ -50,7 +50,7 @@ import todolist.composeapp.generated.resources.*
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel = viewModel { HomeViewModel() },
+    viewModel: HomeViewModel = koinViewModel(),
     onNavigateToArchive: () -> Unit,
     onNavigateToDetail: (String) -> Unit
 ) {

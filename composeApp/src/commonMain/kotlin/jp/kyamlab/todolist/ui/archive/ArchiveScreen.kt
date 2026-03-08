@@ -27,7 +27,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import org.koin.compose.viewmodel.koinViewModel
 import jp.kyamlab.todolist.ui.home.ToDoItemCard
 import org.jetbrains.compose.resources.stringResource
 import todolist.composeapp.generated.resources.Res
@@ -38,7 +38,7 @@ import todolist.composeapp.generated.resources.unarchive
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ArchiveScreen(
-    viewModel: ArchiveViewModel = viewModel { ArchiveViewModel() },
+    viewModel: ArchiveViewModel = koinViewModel(),
     onNavigateBack: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
